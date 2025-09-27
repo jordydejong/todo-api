@@ -1,49 +1,13 @@
-using Microsoft.EntityFrameworkCore;
-using TodoApi.Data;
-using TodoApi.Middleware;
+using TodoApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlPath = System.IO.Path.Combine(AppContext.BaseDirectory, xmlFile);
-    if (System.IO.File.Exists(xmlPath))
-    {
-        options.IncludeXmlComments(xmlPath);
-    }
-});
 builder.Services.AddControllers();
-
-// Configure PostgreSQL with connection string that can be overridden by environment variable
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-// Allow environment variable override: ConnectionStrings__DefaultConnection
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(connectionString));
-
-builder.Services.AddScoped<TodoApi.Services.TodoService>();
+builder.Services.AddApiDocumentation();
+builder.Services.AddApplicationServices(builder.Configuration);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-
-
-app.UseHttpsRedirection();
-
-// Add IP whitelist middleware (only in production)
-if (!app.Environment.IsDevelopment())
-{
-    app.UseMiddleware<IpWhitelistMiddleware>();
-}
-
-app.MapControllers();
+app.ConfigurePipeline();
 
 app.Run();
