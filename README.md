@@ -82,6 +82,30 @@ docker-compose down
 
 The API will be available at `http://localhost:8080`
 
+### Production Deployment
+
+Use the pre-built image from GitHub Container Registry with your hosted PostgreSQL:
+
+```bash
+# Run with external database
+docker run -d -p 8080:8080 \
+  -e ASPNETCORE_ENVIRONMENT=Production \
+  -e ConnectionStrings__DefaultConnection="Host=your-postgres-host;Port=5432;Database=todoapi;Username=user;Password=pass" \
+  -e AllowedIPs__0="203.0.113.1" \
+  -e AllowedIPs__1="203.0.113.2" \
+  --restart unless-stopped \
+  ghcr.io/YOUR_USERNAME/tasks-api:latest
+```
+
+**Before first run, create the database schema:**
+```bash
+# Run migrations (one-time setup)
+docker run --rm \
+  -e ConnectionStrings__DefaultConnection="Host=your-postgres-host;Port=5432;Database=todoapi;Username=user;Password=pass" \
+  ghcr.io/YOUR_USERNAME/tasks-api:latest \
+  dotnet ef database update
+```
+
 ### Manual Docker Build
 
 ```bash
