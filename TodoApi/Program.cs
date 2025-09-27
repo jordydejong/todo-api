@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using TodoApi.Data;
+using TodoApi.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +37,12 @@ if (app.Environment.IsDevelopment())
 
 
 app.UseHttpsRedirection();
+
+// Add IP whitelist middleware (only in production)
+if (!app.Environment.IsDevelopment())
+{
+    app.UseMiddleware<IpWhitelistMiddleware>();
+}
 
 app.MapControllers();
 
