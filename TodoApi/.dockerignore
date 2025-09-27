@@ -1,0 +1,31 @@
+# Ignore build artifacts and temporary files
+**/bin/
+**/obj/
+**/.vs/
+**/.vscode/
+
+# Ignore git and documentation
+.git
+.gitignore
+README.md
+Dockerfile*
+.dockerignore
+
+# Ignore OS files
+**/.DS_Store
+**/Thumbs.db
+
+# Ignore logs
+**/logs/
+**/*.log
+
+# Ignore development databases
+**/*.db
+**/*.sqlite
+
+# Ignore user secrets and development settings
+**/appsettings.Development.json
+**/.env
+
+# Ignore node_modules if any frontend is added later
+**/node_modules/

@@ -63,6 +63,38 @@ A RESTful Todo API built with .NET 9.0, PostgreSQL, and Entity Framework Core.
 
    Open your browser to: `https://localhost:5001/swagger`
 
+## Docker Deployment
+
+### Using Docker Compose (Recommended)
+
+Run the entire application with PostgreSQL using Docker Compose:
+
+```bash
+# Start services
+docker-compose up -d
+
+# View logs
+docker-compose logs -f todoapi
+
+# Stop services
+docker-compose down
+```
+
+The API will be available at `http://localhost:8080`
+
+### Manual Docker Build
+
+```bash
+# Build the image
+cd TodoApi
+docker build -t todoapi .
+
+# Run with external PostgreSQL
+docker run -d -p 8080:8080 \
+  -e ConnectionStrings__DefaultConnection="Host=your-postgres;Port=5432;Database=todoapi;Username=user;Password=pass" \
+  todoapi
+```
+
 ## Todo Model
 
 ```json
