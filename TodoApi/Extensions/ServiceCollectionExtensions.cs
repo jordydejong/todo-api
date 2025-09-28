@@ -10,8 +10,13 @@ namespace TodoApi.Extensions
         {
             // Database
             var connectionString = configuration.GetConnectionString("DefaultConnection");
+
             services.AddDbContext<AppDbContext>(options =>
-                options.UseNpgsql(connectionString));
+            {
+                options.UseNpgsql(connectionString);
+                options.EnableSensitiveDataLogging(false);
+                options.EnableDetailedErrors(true);
+            });
 
             // Application services
             services.AddScoped<TodoService>();
