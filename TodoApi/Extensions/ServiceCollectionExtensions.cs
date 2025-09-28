@@ -16,6 +16,29 @@ namespace TodoApi.Extensions
             // Application services
             services.AddScoped<TodoService>();
 
+            // CORS configuration
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowedOrigins", policy =>
+                {
+                    var allowedOrigins = configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
+                        ?? new[] { "http://localhost:3000" };
+
+                    policy.WithOrigins(allowedOrigins)
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowCredentials();
+                });
+
+                // Development policy - allow all origins
+                options.AddPolicy("DevelopmentCors", policy =>
+                {
+                    policy.AllowAnyOrigin()
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+            });
+
             return services;
         }
 

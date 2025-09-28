@@ -11,6 +11,13 @@ namespace TodoApi.Extensions
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+                // Use permissive CORS in development
+                app.UseCors("DevelopmentCors");
+            }
+            else
+            {
+                // Use configured CORS origins in production
+                app.UseCors("AllowedOrigins");
             }
 
             app.UseHttpsRedirection();
